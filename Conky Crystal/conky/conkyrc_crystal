@@ -1,0 +1,95 @@
+conky.config = {
+
+-- Conky by Dean Loros
+-- Conky settings #
+	background = false,
+	update_interval = 0.5,
+	double_buffer = true,
+	no_buffers = true,
+
+-- number of cpu samples to average
+-- set to 1 to disable averaging
+	cpu_avg_samples = 2,
+
+-- number of net samples to average
+-- set to 1 to disable averaging
+	net_avg_samples = 2,
+
+-- Window specifications #
+	own_window = true,
+        own_window_type = 'desktop',
+	own_window_hints = 'undecorated,below,sticky,skip_taskbar,skip_pager',
+	own_window_title = '',
+	own_window_transparent=true,
+	own_window_argb_visual = true,
+	own_window_argb_value = 200,
+
+-- Minimum size of text area
+	minimum_width = 150, minimum_height = 850,
+
+-- Alignment #
+	alignment = 'top_right',
+	gap_x = 10,
+	gap_y = 30,
+
+	border_inner_margin = 4,
+	border_outer_margin = 0,
+
+-- Graphics settings #
+	draw_shades = false,
+	draw_outline = true,
+	draw_borders = false,
+	draw_graph_borders = false,
+
+-- Text settings #
+	use_xft = true,
+        font = 'Nasalization:size=12',
+	xftalpha = 0.8,
+
+	override_utf8_locale = true,
+
+	imlib_cache_size = 0,
+
+-- Color scheme #
+	default_color = 'white',
+--      default_shade_color = 'black',
+        default_outline_color = 'blue',
+};
+
+conky.text = [[
+${hr 1}
+${font Nasalization:size=18}SYSTEM${font}
+${execi 3600 /bin/cat /etc/*release* | grep PRETTY_NAME | cut -c 14-29}
+${exec cat /proc/cpuinfo|grep 'model name'|sed -e 's/model name.*: //'| uniq | cut -c 1-16}
+$kernel
+${font DS Crystal:size=14}${freq_g 4} ${font}GHz
+UPTIME: ${voffset -4}${font DS Crystal:size=14}${uptime}${font}
+UPDATES: ${voffset -4}${font DS Crystal:size=14}${execi 360 aptitude search "~U" | wc -l | tail}${font}
+${hr 1}
+CPU0:${goto 70}${voffset -4}${font DS Crystal:size=14}${cpu cpu1}${goto 110}${execi 30 sensors|grep 'Core 0'| awk -F'+' '{print $2}' | awk -F'.' '{print $1}'} ${font}°C 
+CPU1:${goto 70}${voffset -4}${font DS Crystal:size=14}${cpu cpu2}${goto 110}${execi 30 sensors|grep 'Core 1'| awk -F'+' '{print $2}' | awk -F'.' '{print $1}'} ${font}°C 
+CPU2:${goto 70}${voffset -4}${font DS Crystal:size=14}${cpu cpu3}${goto 110}${execi 30 sensors|grep 'Core 2'| awk -F'+' '{print $2}' | awk -F'.' '{print $1}'} ${font}°C 
+CPU3:${goto 70}${voffset -4}${font DS Crystal:size=14}${cpu cpu4}${goto 110}${execi 30 sensors|grep 'Core 3'| awk -F'+' '{print $2}' | awk -F'.' '{print $1}'} ${font}°C
+${hr 1}
+GPU1:   ${voffset -4}${font DS Crystal:size=14}${execi 5 nvidia-settings -t -q [gpu:0]/GPUCoreTemp} ${font}°C
+GPU2:   ${voffset -4}${font DS Crystal:size=14}${execi 5 nvidia-settings -t -q [gpu:1]/GPUCoreTemp} ${font}°C
+${hr 1}
+${font DS Crystal:size=14}$processes${font}${goto 45}${voffset -2}Total Process
+${font DS Crystal:size=14}$running_threads${font}${goto 45}${voffset -2}Run Process 
+${hr 1}
+${voffset 5}${font StyleBats:size=14}I${font} ${voffset -5}Root:
+${voffset 5}${fs_used /}/${fs_size /}
+${voffset 5}${font StyleBats:size=14}I${font} ${voffset -5}Home:
+${voffset 5}${fs_used /home}/${fs_size /home}
+${voffset 5}${font StyleBats:size=14}I${font} ${voffset -5}Storage:
+${voffset 5}${fs_used /media/Storage}/${fs_size /media/Storage}
+${hr 1}
+${font DS Crystal:size=14}${upspeedf bond0}${goto 60}kb/s${voffset -2}${font PizzaDude Bullets:size=16} N${font}${voffset 2}
+${alignr}${upspeedgraph bond0 15,140 000000 000000}
+${font DS Crystal:size=14}${downspeedf bond0}${goto 60}kb/s${voffset -2}${font PizzaDude Bullets:size=16} T${font}${voffset 2}
+${alignr}${downspeedgraph bond0 15,140 000000 000000}
+${voffset -15}
+${alignc}${font DS Crystal:size=14}${totalup bond0}${goto 100}${font PizzaDude Bullets:size=14} N${voffset 5}
+${alignc}${font DS Crystal:size=14}${totaldown bond0}${goto 100}${font PizzaDude Bullets:size=14} T${font}
+${hr 1}
+]];
