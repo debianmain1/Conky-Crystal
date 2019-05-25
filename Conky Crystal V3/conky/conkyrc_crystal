@@ -1,0 +1,119 @@
+conky.config = {
+
+-- Conky by Dean Loros
+-- Conky settings #
+	background = false,
+	update_interval = 0.5,
+	double_buffer = true,
+	no_buffers = true,
+
+-- number of cpu samples to average
+-- set to 1 to disable averaging
+	cpu_avg_samples = 2,
+
+-- number of net samples to average
+-- set to 1 to disable averaging
+	net_avg_samples = 2,
+
+-- Window specifications #
+	own_window = true,
+        own_window_type = 'desktop',
+	own_window_hints = 'undecorated,below,sticky,skip_taskbar,skip_pager',
+	own_window_title = '',
+	own_window_transparent=true,
+	own_window_argb_visual = true,
+	own_window_argb_value = 200,
+
+-- Minimum size of text area
+	minimum_width = 170, minimum_height = 1080,
+
+-- Misc Console #
+        out_to_console = false,
+        out_to_stderr = false,
+        extra_newline = false,
+
+-- Alignment #
+	alignment = 'top_right',
+	gap_x = 10,
+	gap_y = 20,
+
+	border_inner_margin = 4,
+	border_outer_margin = 0,
+
+-- Graphics settings #
+	draw_shades = false,
+	draw_outline = true,
+	draw_borders = false,
+	draw_graph_borders = true,
+
+-- Text settings #
+	use_xft = true,
+        font = 'Nasalization:size=11',
+	xftalpha = 0.8,
+
+	override_utf8_locale = true,
+
+	imlib_cache_size = 0,
+
+-- Color scheme #
+	default_color = 'white',
+--      default_shade_color = 'black',
+        default_outline_color = 'blue',
+};
+
+conky.text = [[
+${hr 2}
+${font Nasalization:size=18}${alignc}SYSTEM${font}
+${alignc}${execi 3600 /bin/cat /etc/*release* | grep PRETTY_NAME | cut -c 14-29}
+${alignc}${exec cat /proc/cpuinfo|grep 'model name'|sed -e 's/model name.*: //'| uniq | cut -c 1-26}
+${alignc}$kernel${voffset 3}
+${alignc}${font LCDMono2:size=14}${freq_g 4} ${font}GHz${voffset 3}
+${alignc}${font LCDMono2:size=14}${uptime}${font} UPTIME${voffset 3}
+${alignc}${font LCDMono2:size=14}${execi 360 aptitude search "~U" | wc -l | tail}${font}  UPDATES
+${hr 2}
+LOADS & TEMPS:${voffset 2}
+${goto 25}CPU0:${goto 85}${font LCDMono2:size=14}${cpu cpu1}${goto 135}${execi 30 sensors|grep 'Core 0'| awk -F'+' '{print $2}' | awk -F'.' '{print $1}'} ${font}°C${voffset 2} 
+${goto 25}CPU1:${goto 85}${font LCDMono2:size=14}${cpu cpu2}${goto 135}${execi 30 sensors|grep 'Core 1'| awk -F'+' '{print $2}' | awk -F'.' '{print $1}'} ${font}°C${voffset 2} 
+${goto 25}CPU2:${goto 85}${font LCDMono2:size=14}${cpu cpu3}${goto 135}${execi 30 sensors|grep 'Core 2'| awk -F'+' '{print $2}' | awk -F'.' '{print $1}'} ${font}°C${voffset 2} 
+${goto 25}CPU3:${goto 85}${font LCDMono2:size=14}${cpu cpu4}${goto 135}${execi 30 sensors|grep 'Core 3'| awk -F'+' '{print $2}' | awk -F'.' '{print $1}'} ${font}°C
+${goto 25}CPU4:${goto 85}${font LCDMono2:size=14}${cpu cpu5}${goto 135}${execi 30 sensors|grep 'Core 4'| awk -F'+' '{print $2}' | awk -F'.' '{print $1}'} ${font}°C
+${goto 25}CPU5:${goto 85}${font LCDMono2:size=14}${cpu cpu6}${goto 135}${execi 30 sensors|grep 'Core 5'| awk -F'+' '{print $2}' | awk -F'.' '{print $1}'} ${font}°C
+${hr 2}
+GPU TEMP:${voffset 5}
+GPU1:  ${voffset -2}${font LCDMono2:size=14}${execi 5 nvidia-settings -t -q [gpu:0]/GPUCoreTemp} ${font}${voffset -2}°C${goto 110}GPU2:  ${voffset -2}${font LCDMono2:size=14}${execi 5 nvidia-settings -t -q [gpu:1]/GPUCoreTemp} ${font}°C
+${hr 2}
+HDD TEMP:${voffset 5}
+HDD1:   ${voffset -2}${font LCDMono2:size=14}${hddtemp /dev/sda} ${font}°C${goto 110}HDD2:   ${voffset -2}${font LCDMono2:size=14}${hddtemp /dev/sdb} ${font}°C${voffset 2} 
+HDD3:   ${voffset -2}${font LCDMono2:size=14}${hddtemp /dev/sdc} ${font}°C${goto 110}HDD4:   ${voffset -2}${font LCDMono2:size=14}${hddtemp /dev/sdd} ${font}°C
+${hr 2}
+Memory:${voffset 5}
+${alignc}RAM $memperc% of  $memmax
+${hr 2}
+CPU Load:${voffset 5}
+${goto 25}PID${goto 90}LOAD
+${alignc}${top pid 1}   ${font LCDMono2:size=14}${top cpu 1} ${font}%${voffset 2}
+${alignc}${top pid 2}   ${font LCDMono2:size=14}${top cpu 2} ${font}%${voffset 2}
+${alignc}${top pid 3}   ${font LCDMono2:size=14}${top cpu 3} ${font}%${voffset 2}
+${alignc}${top pid 4}   ${font LCDMono2:size=14}${top cpu 4} ${font}%${voffset 2}
+${alignc}${top pid 5}   ${font LCDMono2:size=14}${top cpu 5} ${font}%${voffset 7}
+${alignc}${font LCDMono2:size=14}$processes${font}  ${voffset -2}Total Process${voffset 2}
+${alignc}${font LCDMono2:size=14}$running_threads${font}  ${voffset -2}Run Process${voffset 2} 
+${hr 2}
+Disks:${voffset 2}
+${voffset 5}${font StyleBats:size=14}I${font}${voffset -2} Root: ${fs_used /}/${fs_size /}
+${voffset 5}${font StyleBats:size=14}I${font} ${voffset -2}Home: ${fs_used /home}/${fs_size /home}
+${voffset 5}${font StyleBats:size=14}I${font} ${voffset -2}Storage: ${fs_used /media/Storage}/${fs_size /media/Storage}
+${hr 2}
+Network:${voffset 2}
+${alignc}Wan: ${execi 3600 wget -q -O - checkip.dyndns.org | sed -e 's/[^[:digit:]\|.]//g'}
+${alignc}Lan: ${addr bond0}
+
+${alignc}${font LCDMono2:size=14}${upspeedf bond0}  kb/s${voffset -2}${font PizzaDude Bullets:size=16} N${font}${voffset 5}
+${alignc}${upspeedgraph bond0 20,160 000000 000000}${voffset 15}
+${alignc}${font LCDMono2:size=14}${downspeedf bond0}  kb/s${voffset -2}${font PizzaDude Bullets:size=16} T${font}${voffset 5}
+${alignc}${downspeedgraph bond0 20,160 000000 000000}
+${voffset 5}
+UP:${goto 75}${font LCDMono2:size=14}${totalup bond0}${goto 130}${font PizzaDude Bullets:size=14}   N${voffset 5}${font}
+DOWN:${goto 75}${alignc}${font LCDMono2:size=14}${totaldown bond0}${goto 130}${font PizzaDude Bullets:size=14}   T${font}
+${hr 2}
+]];
